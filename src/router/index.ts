@@ -19,7 +19,7 @@ const routes = [
   {
     path: '/c/:name',
     name: 'category',
-    component: () => import('../views/CategoryView.vue')
+    component: () => import('../views/CategoryPage.vue')
   }
 ]
 
