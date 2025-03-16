@@ -71,8 +71,6 @@ defineProps<{
   &__categories {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 1.5rem;
   }
 }
 </style>

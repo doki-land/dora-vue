@@ -1,18 +1,30 @@
-### 通用字符串
-home = 首页
-forum = 论坛
-post = 帖子
-search = 搜索
-login = 登录
-register = 注册
-settings = 设置
-logout = 退出
+# 通用文本
+common = 
+    .post = 帖子
+    .loading = 加载中...
+    .error = 出错了！
+    .retry = 重试
 
-### 论坛相关字符串
-forum-title = 论坛标题
-forum-description = 论坛描述
-forum-posts = 帖子
-forum-members = 成员
-forum-create-post = 发帖
-forum-latest-posts = 最新帖子
-forum-hot-topics = 热门话题
+# 导航
+nav = 
+    .home = 首页
+    .forum = 论坛
+    .tags = 标签
+    .search = 搜索
+    .login = 登录
+    .register = 注册
+    
+# 分类页面
+category = 
+    .tags = 标签
+    .sort = 排序
+    .sort_latest = 最新
+    .sort_hot = 热门
+    .sort_views = 浏览量
+    .filters = 过滤
+    .filter_with_replies = 有回复的
+    .filter_new = 最近3天
+    .posts = 帖子
+    .views = 浏览
+    .replies = 回复
+    .no_posts = 暂无帖子

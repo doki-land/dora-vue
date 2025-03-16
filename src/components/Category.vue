@@ -1,5 +1,5 @@
 <template>
-  <div class="category">
+  <div class="category" @click="navigateToCategory">
     <div class="category__left">
       <img :src="category.logo" :alt="category.name" class="category__logo"/>
       <div class="category__info">
@@ -30,7 +30,9 @@
 <script setup lang="ts">
 import {computed} from 'vue'
 import {Category} from '@/types/forum'
+import {useRouter} from 'vue-router'
 
+const router = useRouter()
 const props = defineProps<{
   category: Category
 }>()
@@ -40,6 +42,10 @@ const displayPosts = computed(() => {
       ? [...props.category.posts].sort((a, b) => new Date(b.createTime).getTime() - new Date(a.createTime).getTime())
       : [...props.category.posts].sort((a, b) => b.replyCount - a.replyCount)
 })
+
+const navigateToCategory = () => {
+  router.push(`/c/${props.category.name}`)
+}
 </script>
 
 <style lang="scss" scoped>
