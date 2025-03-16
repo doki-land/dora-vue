@@ -1,19 +1,15 @@
 {
-    "name": "@doki-land/dora",
-    "version": "0.0.0",
-    "type": "module",
-    "main": "./dist/dora-core.umd.js",
+    "main": "./dist/dora-core.umd.cjs",
     "module": "./dist/dora-core.es.js",
-    "types": "./dist/index.d.ts",
+    "types": "./dist/types.d.ts",
     "exports": {
         ".": {
             "import": "./dist/dora-core.es.js",
-            "require": "./dist/dora-core.umd.js",
-            "types": "./dist/index.d.ts"
+            "require": "./dist/dora-core.umd.cjs"
         }
     },
-    "files": ["dist"],
     "scripts": {
+        "build:watch": "vue-tsc --watch & vite build --watch",
         "dev": "vite",
         "build": "vue-tsc && vite build",
         "preview": "vite preview",
@@ -33,14 +29,6 @@
         "@fluent/bundle": "^0.18.0",
         "@vueuse/core": "^10.3.0",
         "fluent-vue": "^3.7.1"
-    },
-    "devDependencies": {
-        "@types/node": "^20.5.0",
-        "@vitejs/plugin-vue": "^4.2.3",
-        "sass": "^1.66.1",
-        "typescript": "^5.1.6",
-        "vite": "^4.4.9",
-        "vue-tsc": "^1.8.8"
     },
     "packageManager": "pnpm@9.15.0"
 }
