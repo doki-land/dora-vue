@@ -1,5 +1,10 @@
 {
     "name": "@doki-land/dora",
+    "version": "0.0.0",
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
     "main": "./dist/dora-core.umd.cjs",
     "module": "./dist/dora-core.es.js",
     "types": "./dist/types.d.ts",
@@ -13,8 +18,7 @@
         "dev": "vite",
         "build": "vite build",
         "build:watch": "vite build --watch",
-        "preview": "vite preview",
-        "prepublishOnly": "npm run build"
+        "preview": "vite preview"
     },
     "peerDependencies": {
         "pinia": ">=2.1.6",

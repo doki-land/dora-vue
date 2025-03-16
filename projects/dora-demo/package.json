@@ -9,7 +9,10 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@doki-land/dora": "workspace:*"
+        "@doki-land/dora": "workspace:*",
+        "vue": "^3.4.15",
+        "vue-router": "^4.2.5",
+        "pinia": "^2.1.7"
     },
     "packageManager": "pnpm@9.15.0"
 }

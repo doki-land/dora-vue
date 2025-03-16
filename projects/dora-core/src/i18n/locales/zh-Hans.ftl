@@ -10,6 +10,7 @@ nav =
     .home = 首页
     .forum = 论坛
     .tags = 标签
+    .about = 关于
     .search = 搜索
     .login = 登录
     .register = 注册

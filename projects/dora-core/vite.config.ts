@@ -10,12 +10,13 @@ export default defineConfig({
         }
     },
     build: {
+        sourcemap: true,
         watch: {
             include: ['src/**']
         },
         lib: {
             entry: resolve(__dirname, 'src/index.ts'),
-            name: 'DoraCore',
+            name: 'Dora',
             fileName: (format) => `dora-core.${format}.js`,
             formats: ['es', 'umd']
         }

@@ -15,6 +15,8 @@ enUSBundle.addResource(new FluentResource(enUSResource))
 // 创建fluent-vue实例
 const fluentVue = createFluentVue({
     bundles: [zhHansBundle, enUSBundle],
+    // @ts-ignore
+
     locale: 'zh-Hans',
     fallbackLocale: 'en-US'
 })

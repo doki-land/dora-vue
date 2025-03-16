@@ -10,12 +10,12 @@
       </nav>
     </template>
 
-    <router-view />
+    <router-view/>
   </DoraLayout>
 </template>
 
 <script setup lang="ts">
-import { DoraLayout } from '@doki-land/dora'
+import {DoraLayout} from '@doki-land/dora'
 </script>
 
 <style>
