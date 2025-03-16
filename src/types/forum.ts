@@ -1,11 +1,11 @@
-export interface ForumGroup {
+export interface Section {
     id: number
     name: string
     description: string
-    forums: Forum[]
+    categories: Category[]
 }
 
-export interface Forum {
+export interface Category {
     id: number
     name: string
     description: string
