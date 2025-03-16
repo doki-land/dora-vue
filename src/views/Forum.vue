@@ -1,39 +1,39 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
+import { useFluentVue } from 'fluent-vue'
 
-const { t } = useI18n()
+const { $t } = useFluentVue()
 </script>
 
 <template>
   <div class="forum">
-    <h1>{{ t('forum.title') }}</h1>
-    <p class="description">{{ t('forum.description') }}</p>
+    <h1>{{ $t('forum-title') }}</h1>
+    <p class="description">{{ $t('forum-description') }}</p>
     
     <div class="forum-stats">
       <div class="stat-item">
-        <span class="label">{{ t('forum.posts') }}</span>
+        <span class="label">{{ $t('forum-posts') }}</span>
         <span class="value">0</span>
       </div>
       <div class="stat-item">
-        <span class="label">{{ t('forum.members') }}</span>
+        <span class="label">{{ $t('forum-members') }}</span>
         <span class="value">0</span>
       </div>
     </div>
 
     <div class="action-bar">
-      <button class="create-post-btn">{{ t('forum.createPost') }}</button>
+      <button class="create-post-btn">{{ $t('forum-create-post') }}</button>
     </div>
 
     <div class="forum-sections">
       <section class="latest-posts">
-        <h2>{{ t('forum.latestPosts') }}</h2>
+        <h2>{{ $t('forum-latest-posts') }}</h2>
         <div class="posts-list">
           <!-- Posts will be rendered here -->
         </div>
       </section>
 
       <section class="hot-topics">
-        <h2>{{ t('forum.hotTopics') }}</h2>
+        <h2>{{ $t('forum-hot-topics') }}</h2>
         <div class="topics-list">
           <!-- Hot topics will be rendered here -->
         </div>

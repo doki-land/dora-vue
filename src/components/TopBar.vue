@@ -2,7 +2,7 @@
   <div class="topbar">
     <div class="topbar__left">
       <router-link to="/" class="topbar__logo">
-        <img src="/logo.svg" alt="Logo" class="topbar__logo-img" />
+        <img :src="logoSvg" alt="Logo" class="topbar__logo-img" />
         <span class="topbar__logo-text">Dora Forum</span>
       </router-link>
     </div>
@@ -27,7 +27,7 @@
         <i class="fas fa-bell"></i>
       </button>
       <div class="topbar__user">
-        <img src="/avatar.svg" alt="User Avatar" class="topbar__user-avatar" />
+        <img :src="avatarSvg" alt="User Avatar" class="topbar__user-avatar" />
         <span class="topbar__user-name">用户名</span>
       </div>
     </div>
@@ -35,11 +35,17 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import logoSvg from '@/assets/icons/logo.svg'
+import avatarSvg from '@/assets/icons/avatar.svg'
+
+const { t } = useI18n()
+
 const navItems = [
-  { name: '首页', path: '/' },
-  { name: '论坛', path: '/forum' },
-  { name: '标签', path: '/tags' },
-  { name: '关于', path: '/about' },
+  { name: t('nav.home'), path: '/' },
+  { name: t('nav.forum'), path: '/forum' },
+  { name: t('nav.tags'), path: '/tags' },
+  { name: t('nav.about'), path: '/about' },
 ]
 </script>
 

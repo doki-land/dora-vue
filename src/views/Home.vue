@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import {useI18n} from 'vue-i18n'
 import Section from '@/components/Section.vue'
 import type {Section as SectionType} from '@/types/forum'
+import {useFluentVue} from "fluent-vue";
 
-const {t} = useI18n()
+const { $t } = useFluentVue()
 
 // 模拟论坛数据
 const sections: SectionType[] = [

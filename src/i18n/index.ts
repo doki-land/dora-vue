@@ -1,53 +1,26 @@
-import { createI18n } from 'vue-i18n'
+import { createFluentVue } from 'fluent-vue'
+import { FluentBundle } from '@fluent/bundle'
+import {FluentResource} from "@fluent/bundle/esm/resource";
 
-const messages = {
-  en: {
-    common: {
-      home: 'Home',
-      forum: 'Forum',
-      post: 'Post',
-      search: 'Search',
-      login: 'Login',
-      register: 'Register',
-      settings: 'Settings',
-      logout: 'Logout'
-    },
-    forum: {
-      title: 'Forum Title',
-      description: 'Forum Description',
-      posts: 'Posts',
-      members: 'Members',
-      createPost: 'Create Post',
-      latestPosts: 'Latest Posts',
-      hotTopics: 'Hot Topics'
-    }
+// 创建语言包实例
+const zhHansBundle = new FluentBundle('zh-Hans')
+const enUSBundle = new FluentBundle('en-US')
+
+// 加载语言资源
+const zhHansResource = await fetch('/src/i18n/locales/zh-Hans.ftl').then(r => r.text())
+const enUSResource = await fetch('/src/i18n/locales/en-US.ftl').then(r => r.text())
+
+// 添加资源到语言包
+zhHansBundle.addResource(new FluentResource(zhHansResource))
+enUSBundle.addResource(new FluentResource(enUSResource))
+
+
+// 创建fluent-vue实例
+export default createFluentVue({
+  bundles: {
+    'zh-Hans': zhHansBundle,
+    'en-US': enUSBundle
   },
-  zh: {
-    common: {
-      home: '首页',
-      forum: '论坛',
-      post: '帖子',
-      search: '搜索',
-      login: '登录',
-      register: '注册',
-      settings: '设置',
-      logout: '退出'
-    },
-    forum: {
-      title: '论坛标题',
-      description: '论坛描述',
-      posts: '帖子',
-      members: '成员',
-      createPost: '发帖',
-      latestPosts: '最新帖子',
-      hotTopics: '热门话题'
-    }
-  }
-}
-
-export default createI18n({
-  legacy: false,
-  locale: 'zh',
-  fallbackLocale: 'en',
-  messages
+  locale: 'zh-Hans',
+  fallbackLocale: 'en-US'
 })
