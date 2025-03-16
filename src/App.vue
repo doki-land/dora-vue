@@ -1,23 +1,21 @@
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
-</script>
-
 <template>
   <div class="app">
-    <header class="app-header">
-      <nav class="nav">
-        <router-link to="/" class="nav-item">{{ t('common.home') }}</router-link>
-        <router-link to="/forum" class="nav-item">{{ t('common.forum') }}</router-link>
-      </nav>
-    </header>
+    <TopBar/>
+    <header class="app-header"/>
 
     <main class="app-main">
-      <router-view />
+      <router-view/>
     </main>
   </div>
 </template>
+
+<script setup lang="ts">
+import {useI18n} from 'vue-i18n'
+import TopBar from './components/TopBar.vue'
+
+const {t} = useI18n()
+</script>
+
 
 <style lang="scss" scoped>
 .app {
@@ -40,7 +38,7 @@ const { t } = useI18n()
 .nav-item {
   color: white;
   text-decoration: none;
-  
+
   &:hover {
     text-decoration: underline;
   }

@@ -50,6 +50,18 @@ const displayPosts = computed(() => {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: $primary-color;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 
   &__left {
     flex: 0 0 200px;
