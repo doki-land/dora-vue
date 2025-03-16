@@ -1,9 +1,18 @@
+<template>
+  <div class="home">
+    <div class="content">
+      <Section
+          v-for="section in sections"
+          :key="section.id"
+          :section="section"
+      />
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import Section from '@/components/Section.vue'
 import type {Section as SectionType} from '@/types/forum'
-import {useFluentVue} from "fluent-vue";
-
-const { $t } = useFluentVue()
 
 // 模拟论坛数据
 const sections: SectionType[] = [
@@ -81,18 +90,6 @@ const sections: SectionType[] = [
 ]
 </script>
 
-<template>
-  <div class="home">
-    <h1>{{ t('common.home') }}</h1>
-    <div class="content">
-      <Section
-          v-for="section in sections"
-          :key="section.id"
-          :section="section"
-      />
-    </div>
-  </div>
-</template>
 
 <style lang="scss" scoped>
 .home {

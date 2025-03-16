@@ -35,17 +35,17 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
+import { useFluent } from 'fluent-vue'
 import logoSvg from '@/assets/icons/logo.svg'
 import avatarSvg from '@/assets/icons/avatar.svg'
 
-const { t } = useI18n()
+const { $t } = useFluent()
 
 const navItems = [
-  { name: t('nav.home'), path: '/' },
-  { name: t('nav.forum'), path: '/forum' },
-  { name: t('nav.tags'), path: '/tags' },
-  { name: t('nav.about'), path: '/about' },
+  { name: $t('nav.home'), path: '/' },
+  { name: $t('nav.forum'), path: '/forum' },
+  { name: $t('nav.tags'), path: '/tags' },
+  { name: $t('nav.about'), path: '/about' },
 ]
 </script>
 

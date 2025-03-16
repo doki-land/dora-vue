@@ -1,5 +1,5 @@
-import { createFluentVue } from 'fluent-vue'
-import { FluentBundle } from '@fluent/bundle'
+import {createFluentVue} from 'fluent-vue'
+import {FluentBundle} from '@fluent/bundle'
 import {FluentResource} from "@fluent/bundle/esm/resource";
 
 // 创建语言包实例
@@ -14,13 +14,11 @@ const enUSResource = await fetch('/src/i18n/locales/en-US.ftl').then(r => r.text
 zhHansBundle.addResource(new FluentResource(zhHansResource))
 enUSBundle.addResource(new FluentResource(enUSResource))
 
-
 // 创建fluent-vue实例
-export default createFluentVue({
-  bundles: {
-    'zh-Hans': zhHansBundle,
-    'en-US': enUSBundle
-  },
-  locale: 'zh-Hans',
-  fallbackLocale: 'en-US'
+const fluentVue = createFluentVue({
+    bundles: [zhHansBundle, enUSBundle],
+    locale: 'zh-Hans',
+    fallbackLocale: 'en-US'
 })
+
+export default fluentVue

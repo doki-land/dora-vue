@@ -1,20 +1,22 @@
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
-
-const { t } = useI18n()
-const route = useRoute()
-const postId = route.params.id
-</script>
-
 <template>
   <div class="post">
-    <h1>{{ t('common.post') }} #{{ postId }}</h1>
+    <h1>{{ $t('common.post') }} #{{ postId }}</h1>
     <div class="post-content">
       <!-- Post content will be rendered here -->
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useFluent } from 'fluent-vue'
+import { useRoute } from 'vue-router'
+
+const { $t } = useFluent()
+const route = useRoute()
+const postId = route.params.id
+</script>
+
+
 
 <style lang="scss" scoped>
 .post {
