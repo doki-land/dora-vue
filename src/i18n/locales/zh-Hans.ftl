@@ -16,6 +16,7 @@ nav =
     
 # 分类页面
 category = 
+    .categories = 分类
     .tags = 标签
     .sort = 排序
     .sort_latest = 最新
@@ -28,3 +29,5 @@ category =
     .views = 浏览
     .replies = 回复
     .no_posts = 暂无帖子
+    .topic = 主题
+    .activity = 活动

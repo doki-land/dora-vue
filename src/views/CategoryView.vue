@@ -1,83 +1,13 @@
 <template>
   <div class="category-detail">
     <div class="category-detail__container">
-      <!-- 左侧边栏 -->
-      <div class="category-detail__sidebar">
-        <!-- 同Section下的Categories列表 -->
-        <div class="sidebar-section">
-          <h3 class="sidebar-title">{{ currentSection?.name }}</h3>
-          <ul class="categories-list">
-            <li 
-              v-for="cat in currentSection?.categories" 
-              :key="cat.id"
-              :class="{'active': cat.name === categoryName}"
-            >
-              <router-link :to="`/c/${cat.name}`" class="category-link">
-                <img :src="cat.logo" :alt="cat.name" class="category-icon" />
-                <span>{{ cat.name }}</span>
-              </router-link>
-            </li>
-          </ul>
-        </div>
-
-        <!-- 标签过滤区 -->
-        <div class="sidebar-section">
-          <h3 class="sidebar-title">{{ $t('category.tags') }}</h3>
-          <div class="tags-container">
-            <div 
-              v-for="tag in availableTags" 
-              :key="tag"
-              :class="['tag', {'active': selectedTags.includes(tag)}]"
-              @click="toggleTag(tag)"
-            >
-              {{ tag }}
-            </div>
-          </div>
-        </div>
-
-        <!-- 排序选项 -->
-        <div class="sidebar-section">
-          <h3 class="sidebar-title">{{ $t('category.sort') }}</h3>
-          <div class="sort-options">
-            <div 
-              :class="['sort-option', {'active': sortBy === 'latest'}]"
-              @click="sortBy = 'latest'"
-            >
-              {{ $t('category.sort_latest') }}
-            </div>
-            <div 
-              :class="['sort-option', {'active': sortBy === 'hot'}]"
-              @click="sortBy = 'hot'"
-            >
-              {{ $t('category.sort_hot') }}
-            </div>
-            <div 
-              :class="['sort-option', {'active': sortBy === 'views'}]"
-              @click="sortBy = 'views'"
-            >
-              {{ $t('category.sort_views') }}
-            </div>
-          </div>
-        </div>
-
-        <!-- 过滤选项 -->
-        <div class="sidebar-section">
-          <h3 class="sidebar-title">{{ $t('category.filters') }}</h3>
-          <div class="filter-options">
-            <label class="filter-option">
-              <input type="checkbox" v-model="filters.onlyWithReplies" />
-              {{ $t('category.filter_with_replies') }}
-            </label>
-            <label class="filter-option">
-              <input type="checkbox" v-model="filters.onlyNew" />
-              {{ $t('category.filter_new') }}
-            </label>
-          </div>
-        </div>
-      </div>
+      <CategorySide
+        ref="categorySide"
+      />
 
       <!-- 右侧内容区 -->
       <div class="category-detail__content">
+        <!-- 分类头部信息 -->
         <div class="category-header">
           <div class="category-info">
             <img :src="currentCategory?.logo" :alt="currentCategory?.name" class="category-logo" />
@@ -96,20 +26,37 @@
 
         <!-- 帖子列表 -->
         <div class="posts-container">
+          <!-- 帖子列表头部 -->
+          <div class="posts-header">
+            <div class="posts-header-left">{{ $t('category.topic') }}</div>
+            <div class="posts-header-right">
+              <div class="header-item">{{ $t('category.replies') }}</div>
+              <div class="header-item">{{ $t('category.views') }}</div>
+              <div class="header-item">{{ $t('category.activity') }}</div>
+            </div>
+          </div>
+          
+          <!-- 帖子列表内容 -->
           <div 
             v-for="post in filteredPosts" 
             :key="post.id"
             class="post-item"
             @click="goToPost(post.id)"
           >
-            <div class="post-title">{{ post.title }}</div>
-            <div class="post-meta">
-              <span class="post-author">{{ post.author }}</span>
-              <span class="post-time">{{ post.createTime }}</span>
-              <span class="post-views">{{ $t('category.views') }}: {{ post.viewCount }}</span>
-              <span class="post-replies">{{ $t('category.replies') }}: {{ post.replyCount }}</span>
+            <div class="post-main">
+              <div class="post-title">{{ post.title }}</div>
+              <div class="post-meta">
+                <span class="post-author">{{ post.author }}</span>
+                <span class="post-time">{{ post.createTime }}</span>
+              </div>
+            </div>
+            <div class="post-stats">
+              <div class="stat-count">{{ post.replyCount }}</div>
+              <div class="stat-count">{{ post.viewCount }}</div>
+              <div class="stat-date">{{ formatDate(post.lastReplyTime) }}</div>
             </div>
           </div>
+          
           <div v-if="filteredPosts.length === 0" class="no-posts">
             {{ $t('category.no_posts') }}
           </div>
@@ -120,104 +67,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import {ref, computed, onMounted} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Section, Category, Post } from '@/types/forum'
-import {useFluent} from "fluent-vue";
+import { useFluent } from "fluent-vue"
+import CategorySide from '@/components/CategorySide.vue'
+import { sections } from '@/mock/categories'
+import {Section} from "@/types/forum.ts";
 
 const { $t } = useFluent()
 const route = useRoute()
 const router = useRouter()
 const categoryName = computed(() => route.params.name as string)
+const categorySide = ref<InstanceType<typeof CategorySide>>()
 
-// 模拟数据 - 实际项目中应该从API获取
-const sections = ref<Section[]>([
-  {
-    id: 1,
-    name: '前端开发',
-    description: '前端相关技术讨论',
-    categories: [
-      {
-        id: 1,
-        name: 'vue',
-        description: 'Vue.js相关讨论',
-        logo: '/images/frontend.svg',
-        displayMode: 'latest',
-        posts: [
-          {
-            id: 1,
-            title: 'Vue 3 Composition API使用心得',
-            content: '内容...',
-            author: '张三',
-            createTime: '2023-05-15',
-            viewCount: 120,
-            replyCount: 15,
-            lastReplyTime: '2023-05-20'
-          },
-          {
-            id: 2,
-            title: 'Vue Router 4新特性介绍',
-            content: '内容...',
-            author: '李四',
-            createTime: '2023-05-10',
-            viewCount: 85,
-            replyCount: 8,
-            lastReplyTime: '2023-05-18'
-          }
-        ]
-      },
-      {
-        id: 2,
-        name: 'react',
-        description: 'React相关讨论',
-        logo: '/images/frontend.svg',
-        displayMode: 'hot',
-        posts: [
-          {
-            id: 3,
-            title: 'React Hooks最佳实践',
-            content: '内容...',
-            author: '王五',
-            createTime: '2023-05-12',
-            viewCount: 150,
-            replyCount: 20,
-            lastReplyTime: '2023-05-19'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: 2,
-    name: '后端开发',
-    description: '后端相关技术讨论',
-    categories: [
-      {
-        id: 3,
-        name: 'java',
-        description: 'Java相关讨论',
-        logo: '/images/backend.svg',
-        displayMode: 'latest',
-        posts: [
-          {
-            id: 4,
-            title: 'Spring Boot 3新特性',
-            content: '内容...',
-            author: '赵六',
-            createTime: '2023-05-14',
-            viewCount: 110,
-            replyCount: 12,
-            lastReplyTime: '2023-05-21'
-          }
-        ]
-      }
-    ]
+// 格式化日期显示
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
+  
+  if (diffDays < 1) {
+    return '今天'
+  } else if (diffDays < 30) {
+    return `${diffDays}d`
+  } else if (diffDays < 365) {
+    const months = Math.floor(diffDays / 30)
+    return `${months}m`
+  } else {
+    return date.toLocaleDateString()
   }
-])
+}
+
+const ThisSections = ref<Section[]>(sections)
 
 // 当前分类所属的Section
 const currentSection = computed(() => {
-  return sections.value.find(section => 
+  return ThisSections.value.find(section =>
     section.categories.some(cat => cat.name === categoryName.value)
   )
 })
@@ -290,15 +175,19 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .category-detail {
-  padding: 2rem;
+  padding: 1.5rem;
+  background-color: #f5f7fa;
+  min-height: calc(100vh - 60px);
   
   &__container {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
   }
   
   &__sidebar {
-    flex: 0 0 250px;
+    flex: 0 0 220px;
   }
   
   &__content {
@@ -308,18 +197,27 @@ onMounted(() => {
 
 .sidebar-section {
   background-color: #fff;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   
   .sidebar-title {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    color: var(--primary-color, #4fc08d);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    color: $primary-color;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.categories-section {
+  .sidebar-title {
+    color: #333;
     border-bottom: 1px solid #eee;
     padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
   }
 }
 
@@ -329,13 +227,13 @@ onMounted(() => {
   margin: 0;
   
   li {
-    margin-bottom: 0.5rem;
-    padding: 0.5rem;
-    border-radius: 4px;
+    margin-bottom: 0.3rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 3px;
     
     &.active {
-      background-color: rgba(79, 192, 141, 0.1);
-      font-weight: bold;
+      background-color: rgba(24, 144, 255, 0.1);
+      font-weight: 500;
     }
   }
   
@@ -344,14 +242,15 @@ onMounted(() => {
     align-items: center;
     text-decoration: none;
     color: #333;
+    font-size: 0.9rem;
     
     &:hover {
-      color: var(--primary-color, #4fc08d);
+      color: $primary-color;
     }
     
     .category-icon {
-      width: 20px;
-      height: 20px;
+      width: 16px;
+      height: 16px;
       margin-right: 0.5rem;
     }
   }
@@ -360,13 +259,13 @@ onMounted(() => {
 .tags-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.4rem;
   
   .tag {
-    padding: 0.3rem 0.8rem;
+    padding: 0.25rem 0.6rem;
     background-color: #f0f0f0;
-    border-radius: 16px;
-    font-size: 0.9rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
     cursor: pointer;
     transition: all 0.2s;
     
@@ -375,7 +274,7 @@ onMounted(() => {
     }
     
     &.active {
-      background-color: var(--primary-color, #4fc08d);
+      background-color: $primary-color;
       color: white;
     }
   }
@@ -384,20 +283,22 @@ onMounted(() => {
 .sort-options, .filter-options {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.3rem;
   
   .sort-option {
-    padding: 0.5rem;
+    padding: 0.4rem 0.5rem;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 3px;
+    font-size: 0.85rem;
     
     &:hover {
-      background-color: #f0f0f0;
+      background-color: #f5f5f5;
     }
     
     &.active {
-      background-color: rgba(79, 192, 141, 0.1);
-      font-weight: bold;
+      background-color: rgba(24, 144, 255, 0.1);
+      font-weight: 500;
+      color: $primary-color;
     }
   }
   
@@ -406,19 +307,21 @@ onMounted(() => {
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.3rem 0;
     
     input[type="checkbox"] {
-      accent-color: var(--primary-color, #4fc08d);
+      accent-color: $primary-color;
     }
   }
 }
 
 .category-header {
   background-color: #fff;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -429,21 +332,21 @@ onMounted(() => {
     gap: 1rem;
     
     .category-logo {
-      width: 60px;
-      height: 60px;
+      width: 48px;
+      height: 48px;
       object-fit: contain;
     }
     
     .category-name {
-      font-size: 1.8rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
       color: #333;
     }
     
     .category-description {
       color: #666;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       margin: 0;
     }
   }
@@ -455,14 +358,16 @@ onMounted(() => {
       align-items: center;
       
       .label {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
       
       .value {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: var(--primary-color, #4fc08d);
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: $primary-color;
       }
     }
   }
@@ -470,13 +375,40 @@ onMounted(() => {
 
 .posts-container {
   background-color: #fff;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  
+  .posts-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 1.2rem;
+    background-color: #f5f7fa;
+    border-bottom: 1px solid #e8e8e8;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #666;
+    
+    .posts-header-left {
+      flex: 1;
+    }
+    
+    .posts-header-right {
+      display: flex;
+      gap: 2rem;
+      
+      .header-item {
+        width: 80px;
+        text-align: center;
+      }
+    }
+  }
   
   .post-item {
-    padding: 1rem;
-    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid #e8e8e8;
     cursor: pointer;
     transition: background-color 0.2s;
     
@@ -488,21 +420,45 @@ onMounted(() => {
       background-color: #f9f9f9;
     }
     
-    .post-title {
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      color: #333;
+    .post-main {
+      flex: 1;
+      
+      .post-title {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 0.4rem;
+        color: $primary-color;
+      }
+      
+      .post-meta {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.8rem;
+        color: #999;
+        
+        .post-author {
+          font-weight: 500;
+        }
+      }
     }
     
-    .post-meta {
+    .post-stats {
       display: flex;
-      gap: 1rem;
-      font-size: 0.9rem;
-      color: #666;
+      gap: 2rem;
+      align-items: center;
       
-      .post-author {
-        font-weight: bold;
+      .stat-count {
+        width: 80px;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #666;
+      }
+      
+      .stat-date {
+        width: 80px;
+        text-align: center;
+        font-size: 0.85rem;
+        color: $primary-color;
       }
     }
   }
@@ -511,6 +467,7 @@ onMounted(() => {
     text-align: center;
     padding: 2rem;
     color: #999;
+    font-size: 0.9rem;
   }
 }
 </style>
