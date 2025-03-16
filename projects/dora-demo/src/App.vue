@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { DoraLayout } from 'dora-core'
+import { DoraLayout } from '@doki-land/dora'
 </script>
 
 <style>

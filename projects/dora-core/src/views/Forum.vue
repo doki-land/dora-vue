@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useFluentVue } from 'fluent-vue'
+import { useFluent } from 'fluent-vue'
 
-const { $t } = useFluentVue()
+const { $t } = useFluent()
 </script>
 
 <template>

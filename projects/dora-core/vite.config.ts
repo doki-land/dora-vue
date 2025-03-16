@@ -10,23 +10,14 @@ export default defineConfig({
         }
     },
     build: {
+        watch: {
+            include: ['src/**']
+        },
         lib: {
             entry: resolve(__dirname, 'src/index.ts'),
             name: 'DoraCore',
-            fileName: (format) => `dora-core.${format}.js`
-        },
-        rollupOptions: {
-            external: ['vue', 'vue-router', 'pinia', '@vueuse/core', 'fluent-vue', '@fluent/bundle'],
-            output: {
-                globals: {
-                    vue: 'Vue',
-                    'vue-router': 'VueRouter',
-                    pinia: 'Pinia',
-                    '@vueuse/core': 'VueUse',
-                    'fluent-vue': 'FluentVue',
-                    '@fluent/bundle': 'FluentBundle'
-                }
-            }
+            fileName: (format) => `dora-core.${format}.js`,
+            formats: ['es', 'umd']
         }
     },
     css: {
