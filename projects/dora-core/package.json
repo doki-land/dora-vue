@@ -1,12 +1,23 @@
 {
-    "name": "dora-vue",
-    "private": true,
-    "version": "0.0.1",
+    "name": "@doki-land/dora",
+    "version": "0.0.0",
     "type": "module",
+    "main": "./dist/dora-core.umd.js",
+    "module": "./dist/dora-core.es.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/dora-core.es.js",
+            "require": "./dist/dora-core.umd.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "files": ["dist"],
     "scripts": {
         "dev": "vite",
         "build": "vue-tsc && vite build",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "prepublishOnly": "npm run build"
     },
     "dependencies": {
         "@fluent/bundle": "^0.18.0",
