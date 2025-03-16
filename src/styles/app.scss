@@ -1,0 +1,53 @@
+@import './_variables.scss';
+
+// Global styles
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: $font-family;
+  font-size: $font-size-base;
+  background-color: $bg-color-light;
+  color: $text-color;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-md;
+}
+
+// Common components
+.button {
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $border-radius-base;
+  border: none;
+  cursor: pointer;
+  transition: all $transition-duration $transition-timing-function;
+
+  &-primary {
+    background-color: $primary-color;
+    color: white;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+// Layout
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  background-color: $primary-color;
+  padding: $spacing-md;
+  color: white;
+}
+
+.app-main {
+  flex: 1;
+  padding: $spacing-md;
+}
